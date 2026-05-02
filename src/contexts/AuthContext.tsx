@@ -24,35 +24,53 @@ const AuthContext = createContext<AuthContextType>({
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
   const [profile, setProfile] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-      if (user) {
-        // Listen to profile changes
-        const profileRef = doc(db, 'users', user.uid);
-        const unsubProfile = onSnapshot(profileRef, (doc) => {
-          if (doc.exists()) {
-            setProfile(doc.data());
-          } else {
-            setProfile(null);
-          }
-          setLoading(false);
-        }, (error) => {
-          console.error("Profile snapshot error:", error);
-          setLoading(false);
-        });
-        return () => unsubProfile();
+    // Immediate profile check if user is already there
+    let unsubProfile: (() => void) | null = null;
+    
+    const setupProfileListener = (currentUser: User) => {
+      const profileRef = doc(db, 'users', currentUser.uid);
+      unsubProfile = onSnapshot(profileRef, (doc) => {
+        if (doc.exists()) {
+          setProfile(doc.data());
+        } else {
+          setProfile(null);
+        }
+        setLoading(false);
+      }, (error) => {
+        console.error("Profile snapshot error:", error);
+        setLoading(false);
+      });
+    };
+
+    if (auth.currentUser) {
+      setupProfileListener(auth.currentUser);
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        if (!unsubProfile) {
+          setupProfileListener(currentUser);
+        }
       } else {
+        if (unsubProfile) {
+          unsubProfile();
+          unsubProfile = null;
+        }
         setProfile(null);
         setLoading(false);
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      if (unsubProfile) unsubProfile();
+    };
   }, []);
 
   const value = {

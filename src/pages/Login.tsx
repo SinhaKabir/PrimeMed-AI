@@ -64,27 +64,41 @@ export default function Login() {
   };
 
   const handleGoogleSignIn = async () => {
+    setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      // Check if user exists in Firestore, if not create as patient
       const userRef = doc(db, 'users', result.user.uid);
-      const userSnap = await getDoc(userRef);
       
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          uid: result.user.uid,
-          email: result.user.email,
-          displayName: result.user.displayName,
+      // Use setDoc with { merge: true } to avoid getDoc check if we just want to ensure profile exists
+      // We set foundational fields only if they don't exist
+      await setDoc(userRef, {
+        uid: result.user.uid,
+        email: result.user.email,
+        displayName: result.user.displayName,
+        // We don't overwrite role if it already exists, merge: true handles this if we don't include role
+        // However, if it's the first time, we want role: 'patient'. 
+        // We can check if doc exists or just use a default role.
+      }, { merge: true });
+
+      // Check if role is missing and set it
+      const userSnap = await getDoc(userRef);
+      if (!userSnap.exists() || !userSnap.data().role) {
+        await setDoc(userRef, { 
           role: 'patient',
           isApproved: true,
-          createdAt: new Date().toISOString(),
-        });
+          createdAt: new Date().toISOString()
+        }, { merge: true });
       }
       
+      toast.success('Authenticated successfully!');
       navigate('/dashboard');
     } catch (error: any) {
-      toast.error(error.message);
+      if (error.code !== 'auth/popup-closed-by-user') {
+        toast.error(error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 

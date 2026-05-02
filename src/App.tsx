@@ -14,7 +14,16 @@ import { Toaster } from 'sonner';
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
   const { user, isAdmin, loading } = useAuth();
   
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg-dark flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
+          <p className="text-[10px] uppercase tracking-[0.3em] text-accent font-bold animate-pulse">Establishing Neural Link</p>
+        </div>
+      </div>
+    );
+  }
   if (!user) return <Navigate to="/login" />;
   if (adminOnly && !isAdmin) return <Navigate to="/dashboard" />;
   
