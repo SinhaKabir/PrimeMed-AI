@@ -1,0 +1,141 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Georgia&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Georgia", serif;
+  
+  --color-bg-light: #fdfdfd;
+  --color-surface: rgba(255, 255, 255, 0.7);
+  --color-accent: #0ea5e9;
+  --color-accent-muted: rgba(14, 165, 233, 0.05);
+  --color-error: #ef4444;
+  --color-text-main: #1e293b;
+  --color-text-dim: #64748b;
+  --color-border-theme: rgba(0, 0, 0, 0.06);
+
+  /* shadcn/ui compatibility variables */
+  --color-background: var(--color-bg-light);
+  --color-foreground: var(--color-text-main);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-text-main);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-text-main);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--color-border-theme);
+  --color-secondary-foreground: var(--color-text-main);
+  --color-muted: var(--color-border-theme);
+  --color-muted-foreground: var(--color-text-dim);
+  --color-accent-foreground: #ffffff;
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--color-border-theme);
+  --color-input: var(--color-border-theme);
+  --color-ring: var(--color-accent);
+  
+  --radius-lg: 1.5rem;
+  --radius-md: 1.25rem;
+  --radius-sm: 1rem;
+}
+
+@layer base {
+  :root {
+    --background: #fdfdfd;
+    --foreground: #1e293b;
+    --card: rgba(255, 255, 255, 0.7);
+    --card-foreground: #1e293b;
+    --popover: rgba(255, 255, 255, 0.8);
+    --popover-foreground: #1e293b;
+    --primary: #0ea5e9;
+    --primary-foreground: #ffffff;
+    --secondary: rgba(0, 0, 0, 0.04);
+    --secondary-foreground: #1e293b;
+    --muted: rgba(0, 0, 0, 0.04);
+    --muted-foreground: #64748b;
+    --accent: #0ea5e9;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: rgba(0, 0, 0, 0.06);
+    --input: rgba(0, 0, 0, 0.04);
+    --ring: #0ea5e9;
+    --radius: 1.5rem;
+  }
+
+  body {
+    @apply font-sans bg-bg-light text-text-main antialiased selection:bg-accent selection:text-white;
+    background-image: 
+      radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-black/5 rounded-full hover:bg-accent/20 transition-colors;
+}
+
+/* Advanced Glassmorphism */
+.glass {
+  @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+}
+
+.glass-dark {
+  @apply bg-white/40 backdrop-blur-2xl border border-white/20 shadow-xl;
+}
+
+/* Mesh Gradient Backgrounds */
+.mesh-glow {
+  position: relative;
+}
+
+.mesh-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(60px);
+}
+
+/* Modern Typography */
+.text-serif {
+  font-family: var(--font-serif);
+}
+
+.text-display {
+  @apply font-light tracking-tighter leading-[1.1];
+}
+
+/* Unique Interactive Elements */
+.hover-glow {
+  @apply transition-all duration-500;
+}
+
+.hover-glow:hover {
+  @apply border-accent/20 shadow-[0_20px_40px_rgba(14,165,233,0.08)] -translate-y-1;
+}
+
+.active-glow {
+  @apply relative;
+}
+
+.active-glow::after {
+  content: '';
+  @apply absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-accent rounded-full shadow-[0_0_10px_rgba(14,165,233,0.6)];
+}

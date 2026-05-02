@@ -1,0 +1,14 @@
+{
+  "name": "PrimeMed System",
+  "description": "A comprehensive healthcare platform featuring AI-powered symptom checking, doctor report analysis, appointment booking, and digital prescriptions.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "AI Symptom Analysis",
+    "Doctor Appointment Management",
+    "Digital Prescriptions",
+    "Role-based Access Control"
+  ]
+}
