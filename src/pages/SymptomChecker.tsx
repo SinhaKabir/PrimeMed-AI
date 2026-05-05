@@ -552,13 +552,13 @@ export default function SymptomChecker() {
                     {t.severityCritical}
                   </button>
                 </div>
-                <div className="flex gap-4 pt-4">
-                  <Button variant="ghost" onClick={() => setIsAskingSeverity(false)} className="w-full h-14 rounded-2xl text-text-dim hover:text-white hover:bg-white/5">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4 w-full">
+                  <Button variant="ghost" onClick={() => setIsAskingSeverity(false)} className="w-full sm:w-1/3 h-14 rounded-2xl text-text-dim hover:text-white hover:bg-white/5">
                     {t.cancelBtn}
                   </Button>
-                  <Button onClick={handleActualAnalyze} className="w-full bg-accent text-bg-dark hover:bg-accent/90 font-bold h-14 rounded-2xl">
+                  <Button onClick={handleActualAnalyze} className="w-full sm:w-2/3 bg-accent text-bg-dark hover:bg-accent/90 font-bold h-14 rounded-2xl">
                     {t.confirmAnalyzeBtn}
-                    <ArrowRight className="w-5 h-5 ml-2" />
+                    <ArrowRight className="w-5 h-5 ml-2 shrink-0" />
                   </Button>
                 </div>
               </div>
